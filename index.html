@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcade Hub | Game Portal</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom configuration for Tailwind colors and Inter font -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#6366f1', // Indigo 500
+                        'secondary': '#f472b6', // Pink 400
+                        'dark-bg': '#111827', // Gray 900
+                        'card-bg': '#1f2937', // Gray 800
+                    },
+                },
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for glow effect and smooth transitions */
+        .game-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3); /* Subtle primary color glow */
+        }
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .game-card:hover::before {
+            opacity: 1;
+        }
+        .filter-button {
+            transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+        .filter-button.active {
+            background-color: #6366f1; /* primary */
+            color: white;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen">
+
+    <!-- Header / Navigation -->
+    <header class="bg-card-bg shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold tracking-tight text-secondary">
+                <span class="text-primary">Arcade</span> Hub
+            </h1>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#" class="text-gray-300 hover:text-primary transition duration-200">Home</a>
+                <a href="#" class="text-gray-300 hover:text-primary transition duration-200">New Games</a>
+                <a href="#" class="text-gray-300 hover:text-primary transition duration-200">About</a>
+            </nav>
+            <button class="md:hidden p-2 rounded-lg bg-primary hover:bg-indigo-600 transition duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <!-- Hero Section -->
+        <div class="text-center mb-16 p-8 bg-card-bg rounded-xl shadow-2xl border-b-4 border-primary/50">
+            <h2 class="text-4xl sm:text-6xl font-black mb-4 text-white">
+                <span class="text-primary">Play</span> Endless Fun.
+            </h2>
+            <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-6">
+                Explore our curated collection of classic and modern HTML games, updated weekly. Dive into the action now!
+            </p>
+            <a href="#games-list" class="inline-block px-8 py-3 bg-secondary text-white font-bold rounded-full shadow-lg hover:bg-pink-500 transform hover:scale-105 transition duration-300 ease-in-out">
+                Start Playing
+            </a>
+        </div>
+
+        <!-- Filters Section -->
+        <section class="mb-10" id="games-list">
+            <h3 class="text-2xl font-bold mb-4 text-white">Filter Games</h3>
+            <div id="filter-buttons" class="flex flex-wrap gap-4">
+                <!-- Buttons will be rendered here by JS -->
+            </div>
+        </section>
+
+        <!-- Games List -->
+        <section>
+            <h3 class="text-2xl font-bold mb-6 text-white border-l-4 border-primary pl-3">Featured Games</h3>
+            <div id="games-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Game cards will be dynamically inserted here -->
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 py-6 border-t border-gray-700 bg-card-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
+            &copy; 2025 Arcade Hub. All rights reserved. | <a href="#" class="hover:text-primary">Privacy Policy</a>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Data and Dynamic Rendering -->
+    <script>
+        // Mock JSON Data for Games
+        const gamesData = [
+            {
+                id: 1,
+                title: "Cosmic Racer",
+                description: "A fast-paced futuristic racing game through nebulae.",
+                category: "Arcade",
+                image: "https://placehold.co/400x250/3730a3/ffffff?text=Racer",
+                link: "#"
+            },
+            {
+                id: 2,
+                title: "Cipher Solitaire",
+                description: "A challenging card game that tests your logic skills.",
+                category: "Puzzle",
+                image: "https://placehold.co/400x250/a16207/ffffff?text=Puzzle",
+                link: "#"
+            },
+            {
+                id: 3,
+                title: "Dungeon Dive",
+                description: "Explore dark dungeons, fight monsters, and collect treasure.",
+                category: "Adventure",
+                image: "https://placehold.co/400x250/065f46/ffffff?text=RPG",
+                link: "#"
+            },
+            {
+                id: 4,
+                title: "Pixel Platformer",
+                description: "Jump, run, and smash your way through retro levels.",
+                category: "Arcade",
+                image: "https://placehold.co/400x250/be123c/ffffff?text=Platform",
+                link: "#"
+            },
+            {
+                id: 5,
+                title: "Zen Blocks",
+                description: "A calming yet complex block-stacking puzzle.",
+                category: "Puzzle",
+                image: "https://placehold.co/400x250/475569/ffffff?text=Zen",
+                link: "#"
+            },
+            {
+                id: 6,
+                title: "Astro Blaster",
+                description: "Classic space shooter action in the vast unknown.",
+                category: "Arcade",
+                image: "https://placehold.co/400x250/2563eb/ffffff?text=Shooter",
+                link: "#"
+            },
+            {
+                id: 7,
+                title: "Text Quest",
+                description: "An old-school adventure where words are your weapons.",
+                category: "Adventure",
+                image: "https://placehold.co/400x250/4ade80/ffffff?text=Quest",
+                link: "#"
+            },
+            {
+                id: 8,
+                title: "Grid Mania",
+                description: "A fast-paced pattern matching game.",
+                category: "Puzzle",
+                image: "https://placehold.co/400x250/f97316/ffffff?text=Grid",
+                link: "#"
+            },
+        ];
+
+        const gamesContainer = document.getElementById('games-container');
+        const filterButtonsContainer = document.getElementById('filter-buttons');
+        
+        // --- Game Rendering Function ---
+        
+        /**
+         * Generates the HTML string for a single game card.
+         * @param {Object} game - The game object from gamesData.
+         * @returns {string} HTML string.
+         */
+        const createGameCard = (game) => {
+            return `
+                <a href="${game.link}" class="game-card block bg-card-bg rounded-xl shadow-xl hover:shadow-primary/50 cursor-pointer transform">
+                    <img 
+                        src="${game.image}" 
+                        alt="${game.title} Thumbnail" 
+                        class="w-full h-40 object-cover rounded-t-xl"
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x250/6366f1/ffffff?text=Game+Cover'"
+                    >
+                    <div class="p-5">
+                        <span class="inline-block mb-2 text-xs font-semibold tracking-wider uppercase text-secondary">
+                            ${game.category}
+                        </span>
+                        <h4 class="text-xl font-bold text-white mb-2">${game.title}</h4>
+                        <p class="text-gray-400 text-sm">${game.description}</p>
+                    </div>
+                    <div class="p-5 pt-0">
+                        <span class="text-primary font-semibold text-sm flex items-center">
+                            Play Now 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+            `;
+        };
+
+        /**
+         * Renders the game cards based on the selected category.
+         * @param {string} category - The category to filter by (or 'All').
+         */
+        const renderGames = (category) => {
+            // Filter games based on category, or show all
+            const filteredGames = category === 'All' 
+                ? gamesData 
+                : gamesData.filter(game => game.category === category);
+            
+            // Generate HTML for all filtered games
+            const gamesHtml = filteredGames.map(createGameCard).join('');
+
+            // Update the DOM
+            gamesContainer.innerHTML = gamesHtml || 
+                `<p class="col-span-full text-center text-xl text-gray-400 p-8 bg-card-bg rounded-lg">
+                    No games found in the '${category}' category.
+                </p>`;
+        };
+
+        // --- Filter Button Setup ---
+        
+        /**
+         * Initializes and handles the category filter buttons.
+         */
+        const setupFilters = () => {
+            // Get unique categories and add 'All'
+            const categories = ['All', ...new Set(gamesData.map(game => game.category))];
+
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.textContent = category;
+                button.className = 'filter-button px-5 py-2 rounded-full text-sm font-medium bg-gray-700 text-gray-200 hover:bg-primary/80 hover:text-white transition duration-200';
+                
+                // Set 'All' as the initial active button
+                if (category === 'All') {
+                    button.classList.add('active');
+                }
+
+                button.addEventListener('click', () => {
+                    // Update active state
+                    document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Render games for the selected category
+                    renderGames(category);
+                });
+
+                filterButtonsContainer.appendChild(button);
+            });
+        };
+
+        // Initialize the app on load
+        window.onload = () => {
+            setupFilters();
+            // Initially render all games
+            renderGames('All');
+        };
+
+    </script>
+</body>
+</html>
