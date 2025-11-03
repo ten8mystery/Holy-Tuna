@@ -41,8 +41,8 @@
 </head>
 <body class="bg-dark-bg text-gray-100 font-sans min-h-screen pb-12">
 
-    <!-- Header & Filter Section -->
-    <header class="bg-card-bg shadow-xl sticky top-0 z-20">
+    <!-- Header & Filter Section - Added ID and transition classes -->
+    <header id="main-header" class="bg-card-bg shadow-xl sticky top-0 z-20 transition-transform duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <h1 class="text-6xl font-extrabold text-center tracking-tighter mb-2">
                 <span class="text-primary">Holy</span> <span class="text-secondary">Tuna</span>
@@ -109,6 +109,11 @@
         const searchInput = document.getElementById('search-input');
         const noResults = document.getElementById('no-results');
         const filterContainer = document.getElementById('filter-container');
+        
+        // Header elements for the new scroll effect
+        const mainHeader = document.getElementById('main-header');
+        let lastScrollY = window.scrollY;
+        const scrollThreshold = 150; // Distance to scroll down before the header starts hiding
 
         // State to track the active filter
         let currentCategory = 'All'; 
@@ -207,6 +212,25 @@
             renderGames(filteredGames);
         }
 
+        /**
+         * Handles the sticky header hide/show logic on scroll.
+         */
+        function handleScroll() {
+            const currentScrollY = window.scrollY;
+
+            // Only start reacting after scrolling past the initial threshold
+            if (currentScrollY > scrollThreshold && currentScrollY > lastScrollY) {
+                // Scrolling Down -> Hide Header
+                mainHeader.classList.add('-translate-y-full');
+            } else if (currentScrollY < lastScrollY || currentScrollY < scrollThreshold) {
+                // Scrolling Up OR scrolled back to the top -> Show Header
+                mainHeader.classList.remove('-translate-y-full');
+            }
+
+            // Update the last scroll position
+            lastScrollY = currentScrollY;
+        }
+
         // Initialize: Render filters and games on page load
         document.addEventListener('DOMContentLoaded', () => {
             renderFilters(); 
@@ -215,6 +239,9 @@
 
         // Event Listener: Filter games whenever the user types
         searchInput.addEventListener('input', filterGames);
+
+        // Event Listener: Attach the scroll handler for the smooth header effect
+        window.addEventListener('scroll', handleScroll);
 
     </script>
 </body>
