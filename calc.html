@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holy Tuna | Calculator</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom configuration for Tailwind colors and Inter font -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#6366f1', // Indigo 500
+                        'secondary': '#f472b6', // Pink 400
+                        'dark-bg': '#111827', // Gray 900
+                        'card-bg': '#1f2937', // Gray 800
+                        'darker-card-bg': '#1f2937', // Slightly darker for display
+                    },
+                },
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for a sleek dark-mode look */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: #6366f1; /* Primary color */
+            border-radius: 4px;
+        }
+        body::-webkit-scrollbar-track {
+            background-color: #1f2937; /* Card background color */
+        }
+        
+        /* Base button styles */
+        .calc-button {
+            @apply p-4 rounded-xl text-2xl font-semibold transition duration-150 shadow-lg;
+            border: 1px solid rgba(255, 255, 255, 0.05); /* Subtle border for depth */
+        }
+        
+        /* Number/Decimal button styles */
+        .btn-number {
+            @apply bg-card-bg text-gray-100 hover:bg-gray-700 active:bg-gray-600;
+        }
+
+        /* Operator buttons */
+        .btn-operator {
+            @apply bg-secondary text-white hover:bg-pink-500 active:bg-pink-600;
+        }
+        
+        /* Clear/Special function buttons */
+        .btn-function {
+            @apply bg-primary text-white hover:bg-indigo-600 active:bg-indigo-700;
+        }
+        
+        /* Equals button spans two columns */
+        .btn-equals {
+            @apply col-span-2 bg-secondary text-white hover:bg-pink-500 active:bg-pink-600;
+        }
+        
+        /* Display style for responsive text */
+        #display-output {
+            @apply text-right p-6 rounded-t-xl overflow-hidden truncate;
+            min-height: 100px;
+            font-size: clamp(2rem, 5vw, 4rem); /* Responsive font size */
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Header / Navigation -->
+    <header class="bg-card-bg shadow-lg z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <h1 class="text-3xl font-extrabold tracking-tight">
+                    <span class="text-primary group-hover:text-white transition duration-150">Holy</span> <span class="text-secondary group-hover:text-primary transition duration-150">Tuna</span>
+                </h1>
+                <p class="text-gray-400 text-lg font-light hidden sm:block">| Calculator</p>
+            </a>
+            <a href="index.html" class="px-4 py-2 bg-primary rounded-lg text-white font-semibold hover:bg-secondary transition duration-150 shadow-md">
+                <i class="fa-solid fa-gamepad mr-2"></i> Back to Games
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content: Calculator -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-darker-card-bg rounded-xl shadow-2xl border-2 border-primary/20">
+            
+            <!-- Calculator Grid Container -->
+            <div id="calculator-grid" class="grid grid-cols-4 gap-3 p-4">
+                
+                <!-- Display Output -->
+                <div id="display-output" class="col-span-4 bg-card-bg text-white font-light text-6xl">0</div>
+
+                <!-- Row 1: Clear, Percent, Delete, Divide -->
+                <button data-action="clear" class="calc-button btn-function">C</button>
+                <button data-action="percent" class="calc-button btn-function">%</button>
+                <button data-action="delete" class="calc-button btn-function"><i class="fa-solid fa-delete-left"></i></button>
+                <button data-action="divide" class="calc-button btn-operator">÷</button>
+
+                <!-- Row 2: 7, 8, 9, Multiply -->
+                <button data-number="7" class="calc-button btn-number">7</button>
+                <button data-number="8" class="calc-button btn-number">8</button>
+                <button data-number="9" class="calc-button btn-number">9</button>
+                <button data-action="multiply" class="calc-button btn-operator">×</button>
+
+                <!-- Row 3: 4, 5, 6, Subtract -->
+                <button data-number="4" class="calc-button btn-number">4</button>
+                <button data-number="5" class="calc-button btn-number">5</button>
+                <button data-number="6" class="calc-button btn-number">6</button>
+                <button data-action="subtract" class="calc-button btn-operator">-</button>
+
+                <!-- Row 4: 1, 2, 3, Add -->
+                <button data-number="1" class="calc-button btn-number">1</button>
+                <button data-number="2" class="calc-button btn-number">2</button>
+                <button data-number="3" class="calc-button btn-number">3</button>
+                <button data-action="add" class="calc-button btn-operator">+</button>
+
+                <!-- Row 5: Change Sign, 0, Decimal, Equals -->
+                <button data-action="change-sign" class="calc-button btn-number">+/-</button>
+                <button data-number="0" class="calc-button btn-number">0</button>
+                <button data-number="." class="calc-button btn-number">.</button>
+                <button data-action="equals" class="calc-button btn-operator">=</button>
+                
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-4 border-t border-gray-700 bg-card-bg text-center text-gray-500 text-sm">
+        &copy; 2023 Holy Tuna. Utility powered by simple JavaScript.
+    </footer>
+
+    <!-- JavaScript Calculator Logic -->
+    <script>
+        class Calculator {
+            constructor(displayElement) {
+                this.displayElement = displayElement;
+                this.clear();
+            }
+
+            // Resets all calculator state
+            clear() {
+                this.currentOperand = '0';
+                this.previousOperand = '';
+                this.operation = undefined;
+                this.updateDisplay();
+            }
+
+            // Deletes the last character from the current operand
+            delete() {
+                if (this.currentOperand.length > 1) {
+                    this.currentOperand = this.currentOperand.toString().slice(0, -1);
+                } else {
+                    this.currentOperand = '0';
+                }
+                this.updateDisplay();
+            }
+
+            // Appends a number or a decimal point
+            appendNumber(number) {
+                if (number === '.' && this.currentOperand.includes('.')) return;
+                
+                // If the display is '0' and we press another number, replace '0'.
+                if (this.currentOperand === '0' && number !== '.') {
+                    this.currentOperand = number.toString();
+                } else {
+                    this.currentOperand = this.currentOperand.toString() + number.toString();
+                }
+                
+                this.updateDisplay();
+            }
+
+            // Handles the operation selection (+, -, *, /)
+            chooseOperation(operation) {
+                if (this.currentOperand === '0' && this.previousOperand === '') return;
+
+                if (this.previousOperand !== '') {
+                    this.calculate();
+                }
+
+                this.operation = operation;
+                this.previousOperand = this.currentOperand;
+                this.currentOperand = '0';
+                this.updateDisplay();
+            }
+
+            // Calculates the result based on the current operation
+            calculate() {
+                let computation;
+                const prev = parseFloat(this.previousOperand);
+                const current = parseFloat(this.currentOperand);
+                
+                if (isNaN(prev) || isNaN(current)) return;
+                
+                switch (this.operation) {
+                    case 'add':
+                        computation = prev + current;
+                        break;
+                    case 'subtract':
+                        computation = prev - current;
+                        break;
+                    case 'multiply':
+                        computation = prev * current;
+                        break;
+                    case 'divide':
+                        if (current === 0) {
+                             this.displayError("Cannot divide by zero");
+                             return;
+                        }
+                        computation = prev / current;
+                        break;
+                    default:
+                        return;
+                }
+                
+                // Ensure result is clean and manageable
+                this.currentOperand = computation.toFixed(8).replace(/\.?0+$/, "");
+                this.operation = undefined;
+                this.previousOperand = '';
+                this.updateDisplay();
+            }
+            
+            // Toggles the sign of the current operand
+            changeSign() {
+                const current = parseFloat(this.currentOperand);
+                if (isNaN(current)) return;
+                this.currentOperand = (current * -1).toString();
+                this.updateDisplay();
+            }
+            
+            // Converts the current operand to a percentage
+            percent() {
+                const current = parseFloat(this.currentOperand);
+                if (isNaN(current)) return;
+                this.currentOperand = (current / 100).toString();
+                this.operation = undefined;
+                this.previousOperand = '';
+                this.updateDisplay();
+            }
+
+            // Formats the number with localized separators (e.g., 1,000,000)
+            getDisplayNumber(number) {
+                const stringNumber = number.toString();
+                const integerDigits = parseFloat(stringNumber.split('.')[0]);
+                const decimalDigits = stringNumber.split('.')[1];
+                let integerDisplay;
+                
+                if (isNaN(integerDigits)) {
+                    integerDisplay = '';
+                } else {
+                    integerDisplay = integerDigits.toLocaleString('en', { maximumFractionDigits: 0 });
+                }
+                
+                if (decimalDigits != null) {
+                    return `${integerDisplay}.${decimalDigits}`;
+                } else {
+                    return integerDisplay;
+                }
+            }
+
+            // Updates the calculator display
+            updateDisplay() {
+                let currentDisplay = this.getDisplayNumber(this.currentOperand);
+                
+                if (this.previousOperand !== '') {
+                    // Show previous operand and operation above current one if active
+                    const operationSymbol = this.getOperationSymbol(this.operation);
+                    const previousDisplay = this.getDisplayNumber(this.previousOperand);
+                    // Use inner HTML to show the full calculation in the main display area
+                    this.displayElement.innerHTML = `
+                        <div class="text-3xl text-gray-400 font-normal">${previousDisplay} ${operationSymbol}</div>
+                        <div class="text-6xl text-white font-light">${currentDisplay}</div>
+                    `;
+                } else {
+                    // Just show the current operand
+                    this.displayElement.innerHTML = `<div class="text-6xl text-white font-light">${currentDisplay}</div>`;
+                }
+            }
+            
+            // Shows a temporary error message instead of crashing
+            displayError(message) {
+                 this.displayElement.innerHTML = `<div class="text-4xl text-red-400 font-bold">${message}</div>`;
+                 setTimeout(() => this.clear(), 1000); // Clear after 1 second
+            }
+
+            // Converts the operation name to a displayable symbol
+            getOperationSymbol(operation) {
+                switch (operation) {
+                    case 'add': return '+';
+                    case 'subtract': return '-';
+                    case 'multiply': return '×';
+                    case 'divide': return '÷';
+                    default: return '';
+                }
+            }
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const displayOutput = document.getElementById('display-output');
+            const calculator = new Calculator(displayOutput);
+            const buttons = document.querySelectorAll('.calc-button');
+
+            // Attach event listeners to all buttons
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const number = button.dataset.number;
+                    const action = button.dataset.action;
+
+                    if (number != null) {
+                        calculator.appendNumber(number);
+                    } else if (action === 'add' || action === 'subtract' || action === 'multiply' || action === 'divide') {
+                        calculator.chooseOperation(action);
+                    } else if (action === 'equals') {
+                        calculator.calculate();
+                    } else if (action === 'clear') {
+                        calculator.clear();
+                    } else if (action === 'delete') {
+                        calculator.delete();
+                    } else if (action === 'change-sign') {
+                        calculator.changeSign();
+                    } else if (action === 'percent') {
+                        calculator.percent();
+                    }
+                });
+            });
+            
+            // Initial call to set the display to '0'
+            calculator.updateDisplay();
+        });
+    </script>
+</body>
+</html>
