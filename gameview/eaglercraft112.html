@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holy Tuna | Minecraft 1.12</title>
+    <title>Holy Tuna | Game Viewer</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Custom configuration for Tailwind colors and Inter font -->
@@ -72,13 +72,13 @@
             <a href="../index.html" class="text-3xl font-extrabold tracking-tight text-secondary hover:text-primary transition duration-200">
                 <span class="text-primary">Holy</span> Tuna
             </a>
-            <span class="ml-6 text-xl text-gray-400">/ Minecraft 1.12</span>
+            <span class="ml-6 text-xl text-gray-400">/ Minecraft</span>
         </div>
     </header>
 
     <main class="game-area-container">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center">
-            <h2 class="text-4xl font-extrabold mb-8 text-white">Minecraft 1.12</h2>
+            <h2 class="text-4xl font-extrabold mb-8 text-white">Minecraft</h2>
             
             <!-- Game Controls -->
             <div class="mb-4 flex space-x-4">
@@ -102,9 +102,9 @@
             
             <!-- Game Description -->
             <div class="max-w-3xl mt-8 p-6 bg-card-bg rounded-xl shadow-lg">
-                <h3 class="text-xl font-bold mb-3 text-primary">About the Game</h3>
+                <h3 class="text-xl font-bold mb-3 text-primary">About Minecraft</h3>
                 <p class="text-gray-300">
-                    Minecraft is a block game developed by Mojang/Microsoft.
+                    Explore, mine resources, craft tools and items, and build incredible structures in a 3D procedurally generated world. The game is loaded from an external file.
                 </p>
             </div>
 
@@ -122,54 +122,13 @@
         const fullscreenButton = document.getElementById('fullscreen-button');
         const windowedButton = document.getElementById('windowed-button');
 
-        // 1. The HTML content for the embedded game (a simple color changer)
-        const embeddedGameHtml = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <style>
-                    body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #1f2937; color: white; font-family: sans-serif; }
-                    canvas { border: 2px solid #6366f1; border-radius: 8px; cursor: pointer; transition: transform 0.1s; }
-                    canvas:active { transform: scale(0.98); }
-                </style>
-            </head>
-            <body>
-                <canvas id="gameCanvas" width="300" height="300"></canvas>
-                <script>
-                    const canvas = document.getElementById('gameCanvas');
-                    const ctx = canvas.getContext('2d');
-                    let colorIndex = 0;
-                    const colors = ['#f472b6', '#6366f1', '#10b981', '#f59e0b'];
-
-                    function drawSquare(color) {
-                        ctx.fillStyle = color;
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        
-                        // Add text overlay
-                        ctx.fillStyle = 'white';
-                        ctx.font = 'bold 30px sans-serif';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
-                        ctx.fillText('CLICK ME!', canvas.width / 2, canvas.height / 2);
-                    }
-
-                    drawSquare(colors[colorIndex]);
-
-                    canvas.addEventListener('click', () => {
-                        colorIndex = (colorIndex + 1) % colors.length;
-                        drawSquare(colors[colorIndex]);
-                    });
-                </\script>
-            </body>
-            </html>
-        `;
-
-        // Convert the game HTML string into a Data URI for the iframe source
-        const dataUri = 'data:text/html;charset=utf-8,' + encodeURIComponent(embeddedGameHtml);
+        // 1. The URL for the external game file.
+        // **IMPORTANT:** Replace this placeholder URL with the actual path to your HTML game file on your server.
+        const externalGameUrl = "https://cdn.jsdelivr.net/gh/gn-math/html@main/182.html"; 
         
         // 2. Set the iframe source on load
         window.onload = () => {
-            gameIframe.src = dataUri;
+            gameIframe.src = externalGameUrl;
         };
 
         // 3. Fullscreen and Windowed Control Logic
@@ -178,6 +137,7 @@
          * Enters fullscreen mode for the game iframe.
          */
         fullscreenButton.addEventListener('click', () => {
+            // Check if the iframe element supports fullscreen
             if (gameIframe.requestFullscreen) {
                 gameIframe.requestFullscreen();
             } else if (gameIframe.mozRequestFullScreen) { /* Firefox */
@@ -206,7 +166,7 @@
                 }
             }
             
-            // Re-apply the windowed class to ensure it snaps back (though CSS handles most of this)
+            // Re-apply the windowed class properties
             gameIframe.style.width = '800px';
             gameIframe.style.height = '600px';
         });
