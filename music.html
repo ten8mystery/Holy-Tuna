@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holy Tuna | Music Player</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom configuration for Tailwind colors and Inter font -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#6366f1', // Indigo 500
+                        'secondary': '#f472b6', // Pink 400
+                        'dark-bg': '#111827', // Gray 900
+                        'card-bg': '#1f2937', // Gray 800
+                        'darker-card-bg': '#1f2937', // Slightly darker for display
+                    },
+                },
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for a sleek dark-mode look (retained from calculator) */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: #6366f1; /* Primary color */
+            border-radius: 4px;
+        }
+        body::-webkit-scrollbar-track {
+            background-color: #1f2937; /* Card background color */
+        }
+        
+        /* Music Player Specific Styles */
+        .player-container {
+            width: 100%;
+            max-width: 900px; /* Max width to contain the player nicely */
+            height: calc(100vh - 200px); /* Fill most of the screen */
+            min-height: 500px;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Mobile adjustment for smaller screens */
+        @media (max-width: 640px) {
+             .player-container {
+                height: 80vh; 
+                min-height: 400px;
+            }
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Header / Navigation (Calculator Style) -->
+    <header class="bg-card-bg shadow-lg z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Link to the assumed portal file (using index.html as a safe portal link) -->
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <h1 class="text-3xl font-extrabold tracking-tight">
+                    <span class="text-primary group-hover:text-white transition duration-150">Holy</span> <span class="text-secondary group-hover:text-primary transition duration-150">Tuna</span>
+                </h1>
+                <p class="text-gray-400 text-lg font-light hidden sm:block">| Music Player</p>
+            </a>
+            <!-- Back button -->
+            <a href="index.html" class="px-4 py-2 bg-primary rounded-lg text-white font-semibold hover:bg-secondary transition duration-150 shadow-md">
+                <i class="fa-solid fa-gamepad mr-2"></i> Back to Games
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content: Music Player (Centered Container Style) -->
+    <main class="flex-grow flex flex-col items-center p-4">
+        
+        <h2 class="text-4xl font-extrabold text-white my-8">Music Search Portal</h2>
+
+        <!-- Explainer Box (consistent utility styling) -->
+        <div class="w-full max-w-2xl mb-6 p-4 bg-primary/20 rounded-xl border border-primary text-sm text-gray-200 shadow-md">
+            <p class="font-semibold text-primary"><i class="fa-solid fa-music mr-2"></i> About This Player:</p>
+            <p class="mt-1">Use this tool to search for and listen to music while you play! The player is embedded from an external service.</p>
+        </div>
+
+        <!-- Music Player Container (replaces calculator card) -->
+        <div class="player-container rounded-xl overflow-hidden shadow-2xl ring-4 ring-secondary/50 border-2 border-primary/20 bg-card-bg">
+            <iframe 
+                src="https://ytifywow.vercel.app/search" 
+                title="Music Search Player" 
+                allowfullscreen
+            ></iframe>
+        </div>
+        
+    </main>
+
+    <!-- Footer (Calculator Style) -->
+    <footer class="py-4 border-t border-gray-700 bg-card-bg text-center text-gray-500 text-sm">
+        &copy; 2023 Holy Tuna. Music content provided by external service.
+    </footer>
+</body>
+</html>
