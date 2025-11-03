@@ -317,7 +317,8 @@
          */
         function openInBlank() {
             const targetUrl = window.location.origin + '/index.html'; 
-            
+            window.close
+            window.open("https://en.wikipedia.org/")
             const blankWindow = window.open('about:blank', '_blank');
 
             if (blankWindow) {
