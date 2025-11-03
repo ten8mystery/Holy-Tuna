@@ -59,23 +59,35 @@
                     </p>
                 </div>
 
+                <!-- Status Bar (Clock and Date only) -->
+                <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 mb-6 text-sm font-medium text-gray-400">
+                    <div id="status-clock" class="flex items-center space-x-2">
+                        <i class="fa-solid fa-clock text-primary"></i>
+                        <span id="current-time"></span>
+                    </div>
+                    <div id="status-date" class="flex items-center space-x-2">
+                        <i class="fa-solid fa-calendar-days text-secondary"></i>
+                        <span id="current-date"></span>
+                    </div>
+                </div>
+                <!-- END STATUS BAR -->
+
                 <div class="flex justify-center items-center gap-4 mb-4">
-                    <a href="calc.html" class="inline-block px-4 py-2 bg-secondary rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] **hover:opacity-75**">
+                    <a href="calc.html" class="inline-block px-4 py-2 bg-secondary rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] hover:opacity-75">
                         <i class="fa-solid fa-calculator mr-2"></i> Calculator Tool
                     </a>
                     
-                    <a href="music.html" class="inline-block px-4 py-2 bg-primary rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] **hover:opacity-75**">
-                        <i class="fa-brands fa-youtube mr-2"></i> Music Tool
+                    <a href="music.html" class="inline-block px-4 py-2 bg-primary rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] hover:opacity-75">
+                        <i class="fa-solid fa-music mr-2"></i> Music Tool
                     </a>
 
-                    <a href="history.html" class="inline-block px-4 py-2 bg-dark-bg rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] **hover:opacity-75**">
+                    <a href="history.html" class="inline-block px-4 py-2 bg-dark-bg rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] hover:opacity-75">
                         <i class="fa-solid fa-user-secret mr-2"></i> History
                     </a>
                     
-                    <a href="#" id="blank-link" class="inline-block px-4 py-2 bg-dark-bg rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] **hover:opacity-75**">
-                     <i class="fa-solid fa-user-secret mr-2"></i> Cloak
+                    <a href="#" id="blank-link" class="inline-block px-4 py-2 bg-dark-bg rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] hover:opacity-75">
+                       <i class="fa-solid fa-user-secret mr-2"></i> Cloak
                     </a>
-
                     </div>
 
                 <div class="max-w-xl mx-auto mb-6">
@@ -92,7 +104,8 @@
                 </div>
                 
                 <div id="filter-container" class="flex flex-wrap justify-center gap-3 pt-4 border-t border-gray-700">
-                    </div>
+                    <!-- Filters will be injected here -->
+                </div>
             </div>
             
             <div class="text-center pt-3 border-t border-gray-700">
@@ -107,7 +120,8 @@
         <h2 class="text-3xl font-bold text-white mb-8 pb-2">Games List</h2>
         
         <div id="game-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            </div>
+            <!-- Game cards will be rendered here -->
+        </div>
 
         <div id="no-results" class="hidden text-center mt-16 p-8 bg-card-bg rounded-xl border border-gray-700">
             <i class="fa-solid fa-gamepad text-5xl text-secondary mb-4"></i>
@@ -120,34 +134,70 @@
         Other sites - Holy Salmon: holy-salmon-six.vercel.app | Holy Bass: holy-bass.vercel.app/
     </footer>
 
-    <script>
-        // Mock JSON data for games
+    <script type="text/javascript">
+        
+        // --- HARDCODED GAME DATA ---
         const gamesData = [
             { title: "Minecraft", category: "Sandbox", image: "https://image.api.playstation.com/vulcan/ap/rnd/202407/1020/91fe046f742042e3b31e57f7731dbe2226e1fd1e02a36223.jpg", link: "/gameview/eaglercraft112.html" },
             { title: "Undertale Yellow", category: "Arcade", image: "https://i.ytimg.com/vi/7BQrbHOJI0k/maxresdefault.jpg", link: "/gameview/undertaleyellow.html" },
             { title: "Geometry Dash Lite", category: "Platformer", image: "https://www.pcgamesn.com/wp-content/sites/pcgamesn/2023/12/geometry-dash-2-2-steam.jpg", link: "/gameview/geometrydashlite.html" },
-            { title: "Angry Birds", category: "Puzzle", image: "https://occ-0-8407-116.1.nflxso.net/dnm/api/v6/Z-WHgqd_TeJxSuha8aZ5WpyLcX8/AAAABZICjjBImAL9liWpfCb1MB-vnp8KJE4dIuTuAh7VtOTY4ZmoFGgglulycZ47ElB4qVG5gwAzEKPRSiqDJFtPsNRrqDN1SsTqAVoU.jpg", link: "/gameview/angrybirds.html" },
+            { title: "Angry Birds", category: "Puzzle", image: "https://occ-0-8407-116.1.nflxso.net/dnm/api/v6/Z-WHgqd_TeJxSuha8aZ5WpyLcX8/AAAABZICjjBImAL9liWpfCb1MB-vnp8KJE4dIuTuAh7VtOTY4ZmoFGgglulycZ47ElB4qVG5gwAzEKPRPRSiqDJFtPsNRrqDN1SsTqAVoU.jpg", link: "/gameview/angrybirds.html" },
             { title: "Small World Cup", category: "Sports", image: "https://play-lh.googleusercontent.com/jQCsMmB9NE40JzNf2ie0RP23uI-pvpVfJ6VaJQUD117ScQrmB1jVW8G26jwk0RzkO-0=w526-h296-rw", link: "/gameview/smallworldcup.html" },
             { title: "Slope", category: "Arcade", image: "https://play-lh.googleusercontent.com/FY9FXA14xl5ExZDiLqxEQRUFu8Lau0gM37zMRK5yFk_cadt_a3i5romTW-kbFlk-RQI=w526-h296-rw", link: "/gameview/slope.html" },
             { title: "Baldi's Basics", category: "Puzzle", image: "https://images.squarespace-cdn.com/content/v1/6491eb91bb711304dd556188/98633883-f9d3-4ea3-bfba-97b2f6bebb71/BaldisBasicsClassicRemastered_Screenshot+%281%29.png", link: "/gameview/baldisbasics.html" },
         ];
+        // --- END HARDCODED GAME DATA ---
 
+        
         const gameList = document.getElementById('game-list');
         const searchInput = document.getElementById('search-input');
         const noResults = document.getElementById('no-results');
         const filterContainer = document.getElementById('filter-container');
         
-        // New elements for the collapse feature
+        // Elements for the clock/date
+        const currentTimeEl = document.getElementById('current-time');
+        const currentDateEl = document.getElementById('current-date');
+        // onlineUsersEl removed
+
+        // Elements for the collapse feature
         const collapsibleContent = document.getElementById('collapsible-content');
         const collapseToggle = document.getElementById('collapse-toggle');
         const collapseIcon = document.getElementById('collapse-icon');
         let isCollapsed = false;
-
-        // State to track the active filter
         let currentCategory = 'All'; 
 
+
         /**
-         * Toggles the visibility of the main header content (Logo, Search, and Filters).
+         * Updates the real-time clock and date.
+         */
+        function updateClockAndUsers() {
+            const now = new Date();
+
+            // 1. Clock (HH:MM:SS)
+            const timeOptions = { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                hour12: true 
+            };
+            const timeString = now.toLocaleTimeString('en-US', timeOptions);
+            currentTimeEl.textContent = timeString;
+
+            // 2. Date (Month Day, Year)
+            const dateOptions = { 
+                weekday: 'short', 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            };
+            const dateString = now.toLocaleDateString('en-US', dateOptions);
+            currentDateEl.textContent = dateString;
+            
+            // Online user counter logic removed entirely.
+        }
+
+        /**
+         * Toggles the visibility of the main header content.
          */
         function toggleHeaderCollapse() {
             if (isCollapsed) {
@@ -168,8 +218,8 @@
          * Returns an array of unique game categories including 'All'.
          */
         function getUniqueCategories() {
+            if (gamesData.length === 0) return ['All'];
             const categories = gamesData.map(game => game.category);
-            // Use Set to ensure uniqueness and spread it back into an array
             return ['All', ...new Set(categories)]; 
         }
 
@@ -191,7 +241,6 @@
             // Attach event listeners to the new buttons
             document.querySelectorAll('.filter-button').forEach(button => {
                 button.addEventListener('click', (event) => {
-                    // Update state and refresh the UI
                     currentCategory = event.target.dataset.category;
                     renderFilters(); // Re-render buttons to update the active style
                     filterGames();  // Re-render games based on the new filter
@@ -226,9 +275,14 @@
          * Renders the filtered list of games.
          */
         function renderGames(gamesToRender) {
-            if (gamesToRender.length === 0) {
+            if (gamesToRender.length === 0 && gamesData.length > 0) {
+                // No results after filtering/categorizing, but data exists
                 gameList.innerHTML = '';
                 noResults.classList.remove('hidden');
+            } else if (gamesData.length === 0) {
+                // Data is empty
+                gameList.innerHTML = '<div class="col-span-full text-center text-gray-500 p-4">No games defined.</div>';
+                noResults.classList.add('hidden');
             } else {
                 noResults.classList.add('hidden');
                 const cardsHtml = gamesToRender.map(createGameCard).join('');
@@ -256,27 +310,21 @@
             renderGames(filteredGames);
         }
         
-        // --- NEW FUNCTIONALITY START ---
         /**
          * Opens the site's index page in a new window using the about:blank URI.
          */
         function openInBlank() {
-            // This assumes the index page is at the root of the site (e.g., '/') 
-            // and the content will be loaded in the new window.
             const targetUrl = window.location.origin + '/index.html'; 
             
-            // 1. Open a new window to 'about:blank'
             const blankWindow = window.open('about:blank', '_blank');
 
             if (blankWindow) {
-                // 2. Write an iframe into the new window's document to load the target URL
                 const iframeHtml = `
                     <!DOCTYPE html>
                     <html>
                     <head>
                         <title>Loading...</title>
                         <style>
-                            /* Simple styling to make the iframe fill the whole page */
                             html, body { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
                             iframe { border: none; width: 100%; height: 100%; }
                         </style>
@@ -290,34 +338,37 @@
                 blankWindow.document.write(iframeHtml);
                 blankWindow.document.close();
             } else {
-                // In case of a pop-up blocker
-                alert("The 'about:blank' window could not be opened. Please disable your pop-up blocker.");
+                console.error("The 'about:blank' window could not be opened. Please disable your pop-up blocker.");
             }
         }
-        // --- NEW FUNCTIONALITY END ---
 
 
-        // Initialize: Render filters and games on page load
+        // Initialize: Set up clock, listeners, and load games
         document.addEventListener('DOMContentLoaded', () => {
-            renderFilters(); 
-            filterGames(); // Initial render uses 'All' category and empty search term
             
             // Set up initial ARIA state for accessibility
             collapseToggle.setAttribute('aria-expanded', 'true');
             
-            // --- NEW EVENT LISTENER ---
+            // Start the clock/date update
+            updateClockAndUsers();
+            setInterval(updateClockAndUsers, 1000); // Update every second
+            
+            // Load and filter games immediately
+            renderFilters(); 
+            filterGames(); 
+
             // Event Listener: Attach the click handler for the about:blank link
             document.getElementById('blank-link').addEventListener('click', (event) => {
                 event.preventDefault(); // Stop the default '#' link behavior
                 openInBlank();
             });
+            
+            // Event Listener: Filter games whenever the user types
+            searchInput.addEventListener('input', filterGames);
+
+            // Event Listener: Attach the click handler for the header collapse
+            collapseToggle.addEventListener('click', toggleHeaderCollapse);
         });
-
-        // Event Listener: Filter games whenever the user types
-        searchInput.addEventListener('input', filterGames);
-
-        // Event Listener: Attach the click handler for the header collapse
-        collapseToggle.addEventListener('click', toggleHeaderCollapse);
 
     </script>
 </body>
