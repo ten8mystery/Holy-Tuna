@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Holy Tuna | Game Portal</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom configuration for Tailwind colors and Inter font -->
     <script>
         tailwind.config = {
             theme: {
@@ -47,14 +45,11 @@
 </head>
 <body class="bg-dark-bg text-gray-100 font-sans min-h-screen pb-12">
 
-    <!-- Header & Filter Section -->
     <header id="main-header" class="bg-card-bg shadow-xl sticky top-0 z-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
             
-            <!-- Collapsible Content Wrapper (Now includes Logo/Tagline, Calculator, Search, and Filters) -->
             <div id="collapsible-content" class="collapsible-container transition-all duration-500 ease-in-out overflow-hidden" style="max-height: 600px; padding-bottom: 1.5rem;">
                 
-                <!-- Logo and Tagline (Original prominent style) -->
                 <div class="flex flex-col items-center pt-4 pb-6">
                     <h1 class="text-6xl font-extrabold text-center tracking-tighter mb-2">
                         <span class="text-primary">Holy</span> <span class="text-secondary">Tuna</span>
@@ -64,26 +59,21 @@
                     </p>
                 </div>
 
-                <!-- UTILITY BUTTONS - Smaller, centralized, and designed for easy addition of more buttons -->
                 <div class="flex justify-center items-center gap-4 mb-4">
-                    <!-- Calculator Button -->
-                    <a href="calc.html" class="inline-block px-4 py-2 bg-secondary rounded-xl text-white font-bold text-base hover:bg-primary transition duration-150 shadow-lg transform hover:scale-[1.02]">
+                    <a href="calc.html" class="inline-block px-4 py-2 bg-secondary rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] **hover:opacity-75**">
                         <i class="fa-solid fa-calculator mr-2"></i> Calculator Tool
                     </a>
                     
-                    <!-- YouTube Button -->
-                    <a href="music.html" class="inline-block px-4 py-2 bg-primary rounded-xl text-white font-bold text-base hover:bg-secondary transition duration-150 shadow-lg transform hover:scale-[1.02]">
+                    <a href="music.html" class="inline-block px-4 py-2 bg-primary rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] **hover:opacity-75**">
                         <i class="fa-brands fa-youtube mr-2"></i> Music Tool
                     </a>
                     
-                    <!-- Placeholder for future buttons: 
-                    <a href="future-tool.html" class="inline-block px-4 py-2 bg-primary rounded-xl text-white font-bold text-base hover:bg-secondary transition duration-150 shadow-lg transform hover:scale-[1.02]">
-                        <i class="fa-solid fa-gear mr-2"></i> New Tool
+                    <a href="#" id="blank-link" class="inline-block px-4 py-2 bg-dark-bg rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] **hover:opacity-75**">
+                     <i class="fa-solid fa-user-secret mr-2"></i> about:blank
                     </a>
-                    -->
-                </div>
 
-                <!-- Search Bar -->
+                    </div>
+
                 <div class="max-w-xl mx-auto mb-6">
                     <div class="relative">
                         <i class="fa-solid fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
@@ -97,13 +87,10 @@
                     </div>
                 </div>
                 
-                <!-- Category Filters -->
                 <div id="filter-container" class="flex flex-wrap justify-center gap-3 pt-4 border-t border-gray-700">
-                    <!-- Filter Buttons injected here by JavaScript -->
-                </div>
+                    </div>
             </div>
             
-            <!-- Collapse Toggle Button (Always visible) -->
             <div class="text-center pt-3 border-t border-gray-700">
                 <button id="collapse-toggle" class="text-primary hover:text-secondary transition duration-150 p-2 rounded-full hover:bg-dark-bg/50" aria-label="Toggle Header Collapse">
                     <i id="collapse-icon" class="fa-solid fa-chevron-up text-xl transform transition-transform duration-500"></i>
@@ -112,16 +99,12 @@
         </div>
     </header>
 
-    <!-- Main Content: Game Grid -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         <h2 class="text-3xl font-bold text-white mb-8 pb-2">Games List</h2>
         
-        <!-- Game List Container -->
         <div id="game-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Game Cards will be injected here by JavaScript -->
-        </div>
+            </div>
 
-        <!-- No Results Message -->
         <div id="no-results" class="hidden text-center mt-16 p-8 bg-card-bg rounded-xl border border-gray-700">
             <i class="fa-solid fa-gamepad text-5xl text-secondary mb-4"></i>
             <h3 class="text-2xl font-bold text-white">No Matching Games Found</h3>
@@ -129,12 +112,10 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="mt-20 py-6 border-t border-gray-700 text-center text-gray-500 text-sm">
-        &copy; 2023 Holy Tuna. All rights reserved.
+        © 2023 Holy Tuna. All rights reserved.
     </footer>
 
-    <!-- JavaScript for Data & Interactivity -->
     <script>
         // Mock JSON data for games
         const gamesData = [
@@ -218,7 +199,6 @@
         function createGameCard(game) {
             return `
                 <a href="${game.link}" class="game-card block bg-card-bg rounded-xl shadow-lg hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-1 overflow-hidden group border border-gray-700 hover:border-primary">
-                    <!-- Image Area -->
                     <div class="h-40 overflow-hidden">
                         <img 
                             src="${game.image}" 
@@ -227,7 +207,6 @@
                             onerror="this.onerror=null; this.src='https://placehold.co/400x250/0f172a/94a3b8?text=Image+Unavailable';"
                         >
                     </div>
-                    <!-- Content Area -->
                     <div class="p-5">
                         <span class="text-xs font-semibold uppercase tracking-wider text-secondary">${game.category}</span>
                         <h3 class="text-xl font-bold text-white mt-1 group-hover:text-primary transition duration-150">${game.title}</h3>
@@ -270,6 +249,47 @@
 
             renderGames(filteredGames);
         }
+        
+        // --- NEW FUNCTIONALITY START ---
+        /**
+         * Opens the site's index page in a new window using the about:blank URI.
+         */
+        function openInBlank() {
+            // This assumes the index page is at the root of the site (e.g., '/') 
+            // and the content will be loaded in the new window.
+            const targetUrl = window.location.origin + '/index.html'; 
+            
+            // 1. Open a new window to 'about:blank'
+            const blankWindow = window.open('about:blank', '_blank');
+
+            if (blankWindow) {
+                // 2. Write an iframe into the new window's document to load the target URL
+                const iframeHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Loading...</title>
+                        <style>
+                            /* Simple styling to make the iframe fill the whole page */
+                            html, body { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
+                            iframe { border: none; width: 100%; height: 100%; }
+                        </style>
+                    </head>
+                    <body>
+                        <iframe src="${targetUrl}" allowfullscreen></iframe>
+                    </body>
+                    </html>
+                `;
+
+                blankWindow.document.write(iframeHtml);
+                blankWindow.document.close();
+            } else {
+                // In case of a pop-up blocker
+                alert("The 'about:blank' window could not be opened. Please disable your pop-up blocker.");
+            }
+        }
+        // --- NEW FUNCTIONALITY END ---
+
 
         // Initialize: Render filters and games on page load
         document.addEventListener('DOMContentLoaded', () => {
@@ -278,6 +298,13 @@
             
             // Set up initial ARIA state for accessibility
             collapseToggle.setAttribute('aria-expanded', 'true');
+            
+            // --- NEW EVENT LISTENER ---
+            // Event Listener: Attach the click handler for the about:blank link
+            document.getElementById('blank-link').addEventListener('click', (event) => {
+                event.preventDefault(); // Stop the default '#' link behavior
+                openInBlank();
+            });
         });
 
         // Event Listener: Filter games whenever the user types
