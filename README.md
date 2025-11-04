@@ -8,7 +8,7 @@
 #### Easy to deploy static site
 #### A ton of free music to use
 
-## WHY USE US?:
+## WHY USE US:
 #### We have games no one else has! (Roblox, Minecraft, Undertale, and Ultrakill)
 
 ## CREDITS:
