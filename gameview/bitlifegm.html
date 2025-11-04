@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holy Tuna | Game Viewer</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom configuration for Tailwind colors and Inter font -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#6366f1', // Indigo 500
+                        'secondary': '#f472b6', // Pink 400
+                        'dark-bg': '#111827', // Gray 900
+                        'card-bg': '#1f2937', // Gray 800
+                    },
+                },
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
+            }
+        }
+    </script>
+    <style>
+        /* General styling for the game frame */
+        #game-iframe {
+            width: 800px; /* Default windowed width */
+            height: 600px; /* Default windowed height */
+            border: 4px solid #1f2937;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease-in-out;
+            background-color: #111827; /* Dark background for loading state */
+        }
+
+        /* Style for fullscreen mode */
+        #game-iframe:fullscreen {
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none;
+            max-height: none;
+            border-radius: 0;
+        }
+        
+        /* Ensure the body takes full height for proper centering */
+        .game-area-container {
+            min-height: calc(100vh - 80px); /* Subtract header/footer space */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        /* Responsive adjustments for windowed mode */
+        @media (max-width: 860px) {
+            #game-iframe {
+                width: 95vw;
+                height: 70vw; /* Maintain a reasonable aspect ratio */
+                max-height: 80vh;
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen">
+
+    <!-- Header / Navigation -->
+    <header class="bg-card-bg shadow-lg z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-start items-center">
+            <a href="../index.html" class="text-3xl font-extrabold tracking-tight text-secondary hover:text-primary transition duration-200">
+                <span class="text-primary">Holy</span> Tuna
+            </a>
+            <span class="ml-6 text-xl text-gray-400">/ Angry Birds</span>
+        </div>
+    </header>
+
+    <main class="game-area-container">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center">
+            <h2 class="text-4xl font-extrabold mb-8 text-white">Angry Birds</h2>
+            
+            <!-- Game Controls -->
+            <div class="mb-4 flex space-x-4">
+                <button id="windowed-button" class="px-5 py-2 rounded-full text-sm font-bold bg-primary hover:bg-indigo-600 transition duration-200 shadow-md">
+                    <span class="hidden sm:inline">Switch to</span> Windowed
+                </button>
+                <button id="fullscreen-button" class="px-5 py-2 rounded-full text-sm font-bold bg-secondary hover:bg-pink-500 transition duration-200 shadow-md">
+                    <span class="hidden sm:inline">Go</span> Fullscreen
+                </button>
+            </div>
+
+            <!-- Game Display Area (iFrame) -->
+            <div class="bg-card-bg rounded-xl p-3 border-4 border-primary/50">
+                <iframe 
+                    id="game-iframe" 
+                    frameborder="0" 
+                    allowfullscreen 
+                    allow="fullscreen"
+                    title="Angry Birds"
+                ></iframe>
+            </div>
+            
+            <!-- Game Description -->
+            <div class="max-w-3xl mt-8 p-6 bg-card-bg rounded-xl shadow-lg">
+                <h3 class="text-xl font-bold mb-3 text-primary">About Angry Birds</h3>
+                <p class="text-gray-300">
+                    Defeat pigs in Angry Birds!
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer (simple, to keep the focus on the game) -->
+    <footer class="py-4 border-t border-gray-700 bg-card-bg text-center text-gray-500 text-sm">
+        &copy; Holy Tuna Viewer.
+    </footer>
+
+    <!-- JavaScript for Game Embedding and Fullscreen Logic -->
+    <script>
+        const gameIframe = document.getElementById('game-iframe');
+        const fullscreenButton = document.getElementById('fullscreen-button');
+        const windowedButton = document.getElementById('windowed-button');
+        
+        // Initial loading message for the iframe
+        gameIframe.contentDocument.open();
+        gameIframe.contentDocument.write('<div style="display: flex; justify-content: center; align-items: center; height: 100%; color: #6366f1; font-size: 20px;">Loading Game...</div>');
+        gameIframe.contentDocument.close();
+
+        // 1. The URL for the external game file.
+        const externalGameUrl = "https://cdn.jsdelivr.net/gh/gn-math/html@main/63.html"; 
+        
+        /**
+         * Loads the game content from the external URL and injects it into the iframe.
+         * This forces the browser to treat the content as HTML, bypassing server header issues.
+         */
+        async function loadGameContent() {
+            try {
+                // Fetch the content of the external file as plain text
+                const response = await fetch(externalGameUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const htmlContent = await response.text();
+                
+                // Inject the HTML directly into the iframe's document
+                gameIframe.contentDocument.open();
+                gameIframe.contentDocument.write(htmlContent);
+                gameIframe.contentDocument.close();
+                
+            } catch (error) {
+                console.error("Error loading external game content:", error);
+                
+                // Display a user-friendly error message inside the iframe
+                gameIframe.contentDocument.open();
+                gameIframe.contentDocument.write(`
+                    <div style="padding: 20px; color: white; background: #b91c1c; text-align: center; font-family: sans-serif; border-radius: 8px;">
+                        <h2 style="margin-top: 0; color: white;">🛑 Error Loading Game 🛑</h2>
+                        <p>Could not load game content. This usually happens when the host server sends the wrong file type.</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">If this persists, you may need to host the game on a server that correctly serves HTML files.</p>
+                    </div>
+                `);
+                gameIframe.contentDocument.close();
+            }
+        }
+
+        // 2. Load the game content when the window is ready
+        window.onload = loadGameContent;
+
+        // 3. Fullscreen and Windowed Control Logic (unchanged)
+        
+        /**
+         * Enters fullscreen mode for the game iframe.
+         */
+        fullscreenButton.addEventListener('click', () => {
+            // Check if the iframe element supports fullscreen
+            if (gameIframe.requestFullscreen) {
+                gameIframe.requestFullscreen();
+            } else if (gameIframe.mozRequestFullScreen) { /* Firefox */
+                gameIframe.mozRequestFullScreen();
+            } else if (gameIframe.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                gameIframe.webkitRequestFullscreen();
+            } else if (gameIframe.msRequestFullscreen) { /* IE/Edge */
+                gameIframe.msRequestFullscreen();
+            }
+        });
+
+        /**
+         * Ensures the iframe is in its default windowed size and exits fullscreen if active.
+         */
+        windowedButton.addEventListener('click', () => {
+            // Exit fullscreen if it's currently active on the document
+            if (document.fullscreenElement) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { /* Firefox */
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE/Edge */
+                    document.msExitFullscreen();
+                }
+            }
+            
+            // Re-apply the windowed class properties
+            gameIframe.style.width = '800px';
+            gameIframe.style.height = '600px';
+        });
+
+    </script>
+</body>
+</html>
