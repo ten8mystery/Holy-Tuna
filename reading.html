@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holy Tuna | Utility Apps & Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script>
+        // Custom Tailwind Configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#6366f1', // Indigo 500 - Main action color
+                        'secondary': '#f472b6', // Pink 400 - Accent color
+                        'dark-bg': '#111827', // Gray 900 - Body background
+                        'card-bg': '#1f2937', // Gray 800 - Card and header background
+                    },
+                    boxShadow: {
+                        'glow-primary': '0 0 10px rgba(99, 102, 241, 0.5)',
+                    }
+                },
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for a sleek dark-mode look */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: #6366f1; /* Primary color */
+            border-radius: 4px;
+        }
+        body::-webkit-scrollbar-track {
+            background-color: #1f2937; /* Card background color */
+        }
+        /* Define the collapsed state for the header */
+        .collapsible-container.collapsed {
+            max-height: 0 !important;
+            padding-top: 0 !important; 
+            padding-bottom: 0 !important; 
+        }
+        /* Custom card hover effect for a bit more pop */
+        .app-card:hover .app-icon {
+             filter: drop-shadow(0 0 5px var(--tw-shadow-color));
+             --tw-shadow-color: rgba(99, 102, 241, 0.7); /* Primary glow */
+        }
+        /* Ensure the app-view container uses 100% of the viewport */
+        #app-view:not(.hidden) {
+            height: 100vh;
+            width: 100vw;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen pb-12">
+
+    <!-- Header: Sticky and Collapsible -->
+    <header id="main-header" class="bg-card-bg shadow-xl sticky top-0 z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
+            
+            <div id="collapsible-content" class="collapsible-container transition-all duration-500 ease-in-out overflow-hidden" style="max-height: 250px; padding-bottom: 0.75rem;">
+                
+                <!-- Main Title and Subtitle -->
+                <div class="flex flex-col items-center pt-2 pb-2">
+                    <h1 class="text-4xl font-extrabold text-center tracking-tighter mb-0">
+                        <span class="text-secondary">Holy</span> <span class="text-primary">Tools</span>
+                    </h1>
+                    <p class="text-center text-gray-400 text-base font-light">
+                        A curated collection of useful apps and utilities.
+                    </p>
+                </div>
+
+                <!-- Status Indicators (Time/Date) -->
+                <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 mb-3 text-xs font-medium text-gray-400">
+                    <div id="status-clock" class="flex items-center space-x-1.5">
+                        <i class="fa-solid fa-clock text-primary"></i>
+                        <span id="current-time"></span>
+                    </div>
+                    <div id="status-date" class="flex items-center space-x-1.5">
+                        <i class="fa-solid fa-calendar-days text-secondary"></i>
+                        <span id="current-date"></span>
+                    </div>
+                </div>
+
+                <!-- Navigation/Action Buttons -->
+                <div class="flex justify-center items-center gap-2 mb-2">
+                    <a href="#" class="inline-block px-3 py-1.5 bg-primary rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] hover:opacity-75">
+                        <i class="fa-solid fa-gamepad mr-2"></i> Game Portal
+                    </a>
+                    <a href="#" id="blank-link" class="inline-block px-3 py-1.5 bg-dark-bg border border-gray-700 rounded-xl text-white font-bold text-base transition duration-150 shadow-lg transform hover:scale-[1.02] hover:bg-gray-700/50">
+                        <i class="fa-solid fa-mask mr-2"></i> Cloak
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Collapse Toggle Button -->
+            <div class="text-center pt-1 border-t border-gray-700">
+                <button id="collapse-toggle" class="text-primary hover:text-secondary transition duration-150 p-2 rounded-full hover:bg-dark-bg/50" aria-label="Toggle Header Collapse" aria-expanded="true">
+                    <i id="collapse-icon" class="fa-solid fa-chevron-up text-xl transform transition-transform duration-500"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <div id="main-content-wrapper">
+        
+        <!-- App Grid View (Visible by default) -->
+        <main id="app-grid-container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+            <h2 class="text-3xl font-bold text-white mb-8 pb-2 border-b border-primary/50">Essential Tools</h2>
+            
+            <div id="app-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- App cards will be injected here by JavaScript -->
+            </div>
+        </main>
+        
+        <!-- NEW: Full-Screen App View Container (Hidden by default) -->
+        <div id="app-view" class="hidden fixed inset-0 z-50 bg-dark-bg/95 flex flex-col p-2 sm:p-4 transition-all duration-300">
+            <!-- Control Bar -->
+            <div class="flex justify-between items-center p-2 mb-2 bg-card-bg rounded-lg shadow-xl border border-gray-700">
+                <button id="back-to-apps" class="px-3 py-1.5 bg-primary/70 hover:bg-primary rounded-lg text-white font-semibold text-sm transition duration-150 transform hover:scale-[1.02]">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back to Apps
+                </button>
+                <h3 id="app-view-title" class="text-lg font-bold text-gray-200 truncate mx-4">Loading App...</h3>
+                <button id="fullscreen-toggle" class="px-3 py-1.5 bg-gray-600 hover:bg-gray-500 rounded-lg text-white font-semibold text-sm transition duration-150 transform hover:scale-[1.02]">
+                    <i class="fa-solid fa-expand" id="fullscreen-icon"></i> <span class="hidden sm:inline ml-1">Fullscreen</span>
+                </button>
+            </div>
+            <!-- Iframe -->
+            <!-- The iframe height is controlled by flex-grow to fill the remaining space -->
+            <iframe id="app-iframe" class="flex-grow w-full rounded-lg shadow-2xl border-2 border-primary/50 transition-all duration-300" 
+                    title="Embedded Web Application" 
+                    frameborder="0" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-20 py-6 border-t border-gray-700 text-center text-gray-500 text-sm">
+        &copy; 2025 Holy Tools. All Rights Reserved.
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script type="text/javascript">
+        
+        // --- HARDCODED APP DATA (Using Wiki/Google for reliable iframe embedding) ---
+        const appsData = [
+            { title: "Discord", description: "Chat with friends on Discord!", icon: "fa-brands fa-discord", url: "https://english.jobvn.com/storage/ag/a/discord/", color: "text-primary" },
+            { title: "Peetzah AI", description: "Use AI to easily complete assignments.", icon: "fa-solid fa-brain", url: "https://english.jobvn.com/static/scram-embed.html#https://byod.petezahgames.com/pages/other/ai/", color: "text-secondary" }, 
+            { title: "TikTok", description: "Watch short-form videos on TikTok.", icon: "fa-brands fa-tiktok", url: "https://english.jobvn.com/storage/ag/a/tiktok/", color: "text-primary" },
+            { title: "YouTube", description: "Watch any video quickly!", icon: "fa-brands fa-youtube", url: "https://english.jobvn.com/storage/ag/a/youtube/", color: "text-secondary" }, 
+            { title: "Music Streaming", description: "Stream all of your favorite music!", icon: "fa-solid fa-music", url: "https://ytify.pp.ua/search", color: "text-secondary" },
+        ];
+        // --- END HARDCODED APP DATA ---
+        
+        // DOM Elements
+        const appList = document.getElementById('app-list');
+        const currentTimeEl = document.getElementById('current-time');
+        const currentDateEl = document.getElementById('current-date');
+        const collapsibleContent = document.getElementById('collapsible-content');
+        const collapseToggle = document.getElementById('collapse-toggle');
+        const collapseIcon = document.getElementById('collapse-icon');
+        let isCollapsed = false;
+
+        // NEW APP VIEW ELEMENTS
+        const appView = document.getElementById('app-view');
+        const appIframe = document.getElementById('app-iframe');
+        const backToAppsBtn = document.getElementById('back-to-apps');
+        const fullscreenToggleBtn = document.getElementById('fullscreen-toggle');
+        const fullscreenIcon = document.getElementById('fullscreen-icon');
+        const appViewTitle = document.getElementById('app-view-title');
+        const appGridContainer = document.getElementById('app-grid-container');
+
+        // --- CLOCK AND DATE ---
+
+        /**
+         * Updates the real-time clock and date.
+         */
+        function updateClock() {
+            const now = new Date();
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            const dateOptions = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+            
+            currentTimeEl.textContent = now.toLocaleTimeString('en-US', timeOptions);
+            currentDateEl.textContent = now.toLocaleDateString('en-US', dateOptions);
+        }
+
+        // --- HEADER COLLAPSE ---
+
+        /**
+         * Toggles the visibility of the main header content.
+         */
+        function toggleHeaderCollapse() {
+            if (isCollapsed) {
+                // Expand
+                collapsibleContent.classList.remove('collapsed');
+                collapseIcon.classList.remove('rotate-180');
+                collapseToggle.setAttribute('aria-expanded', 'true');
+            } else {
+                // Collapse
+                collapsibleContent.classList.add('collapsed');
+                collapseIcon.classList.add('rotate-180');
+                collapseToggle.setAttribute('aria-expanded', 'false');
+            }
+            isCollapsed = !isCollapsed;
+        }
+        
+        // --- APP VIEW FUNCTIONS ---
+
+        /**
+         * Opens the specified URL in the iframe and displays the app view.
+         */
+        function openApp(url, title) {
+            appIframe.src = url;
+            appViewTitle.textContent = title;
+            appView.classList.remove('hidden');
+            // Hide the main grid and disable body scroll
+            appGridContainer.classList.add('hidden');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        /**
+         * Closes the app view and returns to the main app grid.
+         */
+        function closeApp() {
+            appView.classList.add('hidden');
+            appIframe.src = 'about:blank'; // Clear the iframe content
+            appViewTitle.textContent = 'Loading App...';
+            // Show the main grid and restore body scroll
+            appGridContainer.classList.remove('hidden');
+            document.body.style.overflow = '';
+            
+            // Exit fullscreen if active
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        }
+
+        /**
+         * Toggles fullscreen mode for the app container.
+         */
+        function toggleFullscreen() {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                // Request fullscreen on the whole app-view element
+                appView.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            }
+        }
+        
+        /**
+         * Updates the fullscreen button icon when fullscreen state changes
+         */
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                fullscreenIcon.classList.remove('fa-expand');
+                fullscreenIcon.classList.add('fa-compress');
+            } else {
+                fullscreenIcon.classList.remove('fa-compress');
+                fullscreenIcon.classList.add('fa-expand');
+            }
+        });
+
+        // --- APP CARD RENDERING ---
+
+        /**
+         * Generates the HTML card for a single app object.
+         */
+        function createAppCard(app) {
+            // Use a button element and an onclick handler to call openApp
+            return `
+                <button onclick="openApp('${app.url}', '${app.title}')" class="app-card block w-full text-left bg-card-bg rounded-xl shadow-lg p-6 hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-1 group border border-gray-700 hover:border-primary focus:outline-none focus:ring-4 focus:ring-primary/50">
+                    <div class="flex items-center space-x-4">
+                        <i class="app-icon ${app.icon} ${app.color} text-4xl group-hover:scale-110 transition duration-300"></i>
+                        <div>
+                            <h3 class="text-xl font-bold text-white group-hover:text-primary transition duration-150">${app.title}</h3>
+                            <p class="text-gray-400 text-sm mt-1">${app.description}</p>
+                        </div>
+                    </div>
+                    <span class="mt-4 inline-block text-xs font-semibold text-secondary group-hover:text-primary transition duration-150">Open App <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                </button>
+            `;
+        }
+
+        /**
+         * Renders all app cards to the main grid.
+         */
+        function renderApps() {
+            if (appsData.length === 0) {
+                 appList.innerHTML = '<div class="col-span-full text-center text-gray-500 p-8 text-lg bg-card-bg rounded-xl">No applications defined.</div>';
+            } else {
+                const cardsHtml = appsData.map(createAppCard).join('');
+                appList.innerHTML = cardsHtml;
+            }
+        }
+        
+        // --- CLOAK FUNCTION (Remains the same) ---
+        function openInBlank() {
+             const targetUrl = window.location.origin + window.location.pathname; 
+             window.open("https://en.wikipedia.org/") 
+             const blankWindow = window.open('about:blank', '_blank');
+
+             if (blankWindow) {
+                 const iframeHtml = `
+                     <!DOCTYPE html>
+                     <html>
+                     <head>
+                         <title>Loading...</title>
+                         <style>
+                             html, body { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #111827; }
+                             iframe { border: none; width: 100%; height: 100%; }
+                         </style>
+                     </head>
+                     <body>
+                         <iframe src="${targetUrl}" allowfullscreen></iframe>
+                     </body>
+                     </html>
+                 `;
+
+                 blankWindow.document.write(iframeHtml);
+                 blankWindow.document.close();
+             } else {
+                 console.error("The 'about:blank' window could not be opened. Please disable your pop-up blocker.");
+                 window.location.href = targetUrl;
+             }
+        }
+
+
+        // Initialization logic: runs when the page is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Start the clock/date update
+            updateClock();
+            setInterval(updateClock, 1000); // Update every second
+            
+            // Render the app cards
+            renderApps(); 
+
+            // Event Listeners for controls
+            document.getElementById('blank-link').addEventListener('click', (event) => {
+                event.preventDefault(); 
+                openInBlank();
+            });
+            collapseToggle.addEventListener('click', toggleHeaderCollapse);
+            backToAppsBtn.addEventListener('click', closeApp);
+            fullscreenToggleBtn.addEventListener('click', toggleFullscreen);
+        });
+
+    </script>
+</body>
+</html>
